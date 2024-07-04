@@ -32,6 +32,19 @@ public class HelloG {
 		 * 		1 2 3 4 5
 		 * 		6 7 8 9 10 형식으로 출력
 		 */
+		for(int i = 0 ; i < 100 ; i++) {
+//			System.out.println((i+1) + " ");
+			
+//			System.out.print( i+1 );
+//			System.out.print(" ");
+			
+			System.out.printf("%d ",i+1);
+			if((i+1) % 5 == 0) {
+				System.out.println();
+			}
+		}
+		
+		
 	}
 
 }
