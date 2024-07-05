@@ -20,10 +20,23 @@ public class WordServiceImplV2 extends WordServiceImplV1 {
 		super(wordFile);
 	}
 
+	/*
+	 * wordList 중에서 임의의 단어 한개를 get 하여
+	 * return 하기
+	 */
 	@Override
 	public WordVO getWord() {
+		
+		int listSize = wordList.size();
 
-		return null;
+//		if(listSize < 1) {
+//			this.wordFileRead();
+//			listSize = wordList.size();
+//		}
+		
+		int position = (int)(Math.random() * listSize);
+		return wordList.get(position);
+		
 	}
 	
 	

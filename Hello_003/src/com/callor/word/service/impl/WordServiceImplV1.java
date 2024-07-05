@@ -42,6 +42,7 @@ public class WordServiceImplV1 implements WordService{
 		InputStream fileInput = null;
 		fileInput = new FileInputStream(wordFile);
 		fileScan = new Scanner(fileInput);
+		this.wordFileRead();
 	}
 
 	/*
@@ -91,7 +92,7 @@ public class WordServiceImplV1 implements WordService{
 	@Override
 	public void wordListPrint() {
 		
-		if(wordList.size() < 1) this.wordFileRead();
+//		if(wordList.size() < 1) this.wordFileRead();
 		
 		System.out.println("단어장 리스트");
 		System.out.println(Line.dLine(50));
