@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { jsx as _jsx } from \"react/jsx-runtime\";\nimport MyPageLayout from \"@components/layout/mypage\";\n\nconst MyServicePage = () => {\n  return /*#__PURE__*/_jsx(MyPageLayout, {});\n};\n\nMyServicePage.getInitialProps = async () => {\n  return {\n    a: 1\n  };\n};\n\nexport default MyServicePage;","map":null,"metadata":{},"sourceType":"module"}

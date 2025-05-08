@@ -1,0 +1,21 @@
+# Base 이미지 지정
+FROM openjdk:17
+
+# 작업위치 설정
+# WORKDIR /root
+
+RUN mkdir /jar
+WORKDIR /jar
+
+# ARG JAR_FILE=smtp.jar
+
+# jar 파일 도커 내부로 복사
+COPY ./pop.jar ./pop.jar
+
+# jar 파일 도커 내부 실행
+ENTRYPOINT ["java", "-jar", "./pop.jar", "--spring.profiles.active=prod"]
+
+# 내부포트 지정
+EXPOSE 8081
+
+#VOLUME /code/attach_files

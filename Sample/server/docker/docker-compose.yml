@@ -1,0 +1,151 @@
+version: '3.7'
+
+services:
+  #########################################################################
+  # PRODUCTION SERVER
+  main_server:
+    build:
+      context: /home/emp/server
+      dockerfile: docker/Dockerfile
+      args:
+        PORT: 7993
+        PROJECT_PATH: ./api/
+        ENV_FILE_NAME: production.env
+        MAX_MEMORY: 4G
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/emp/logs/api:/usr/app/logs/api/
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+
+  sub_server:
+    build:
+      context: /home/emp/server
+      dockerfile: docker/Dockerfile
+      args:
+        PORT: 7993
+        PROJECT_PATH: ./api/
+        ENV_FILE_NAME: production.env
+        MAX_MEMORY: 3G
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/emp/logs/api:/usr/app/logs/api/
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+
+  scheduler:
+    build:
+      context: /home/emp/server
+      dockerfile: docker/Dockerfile
+      args:
+        PROJECT_PATH: ./api/
+        ENV_FILE_NAME: schedule.env
+        MAX_MEMORY: 512m
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/emp/logs/api:/usr/app/logs/api/
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+
+  # PRODUCTION MAIL(SMTP)
+  smtp_server:
+    build:
+      context: /home/emp/server/docker
+      dockerfile: smtp_Dockerfile
+    ports:
+      - 8080:8080
+    # expose:
+      # - 8080
+    volumes:
+      - back_log_volume:/jar/log
+      - docker-config_file_volume:/jar/attach_files
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+  # PRODUCTION MAIL(POP3)
+  pop3_server:
+    build:
+      context: /home/emp/server/docker
+      dockerfile: pop3_Dockerfile
+    ports:
+      - 8081:8081
+      # expose:
+      # - 8080
+    volumes:
+      - back_log_volume:/jar/log
+      - docker-config_file_volume:/jar/attach_files
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+
+  ##############################################################################
+  # # DEVELOP
+  # test_server:
+  #   build:
+  #     context: /home/emp/server
+  #     dockerfile: docker/Dockerfile
+  #     args:
+  #       PORT: 7993
+  #       PROJECT_PATH: ./test/api/
+  #       ENV_FILE_NAME: development.env
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+
+  # front_test:
+  #   build:
+  #     context: /home/emp/front
+  #     dockerfile: docker/Dockerfile
+  #     args:
+  #       PROJECT_PATH: ./test/next
+  #       ENV_FILE_NAME: .env.development
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+
+  ##############################################################
+  # NGINX
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/emp/server/docker/config/nginx-conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /home/emp/server/docker/config/nginx-conf.d/conf.d:/etc/nginx/conf.d:ro
+      - /home/emp/server/docker/config/ssl:/etc/ssl:ro # SSL
+    depends_on:
+      - main_server
+      - sub_server
+      - smtp_server
+      - pop3_server
+      # - test_server
+      # - front_test
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '3'
+        max-size: '5m'
+
+volumes:
+  back_log_volume:
+    external: true
+  docker-config_file_volume:
+    external: true
+    
+networks:
+  default:
+    external:
+      name: nginx

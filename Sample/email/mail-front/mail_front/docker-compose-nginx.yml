@@ -1,0 +1,26 @@
+# 프 - mail.taewonsoft.co.kr
+# 백 - mail.taewonsoft.co.kr:8000
+
+version: "3.7"
+
+services:
+  nginx:
+    container_name: mail-nginx
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      TZ: "Asia/Seoul"
+    volumes:
+      - /home/emp/email/mail-front/config/nginx.conf:/etc/nginx/nginx.conf
+      - /home/emp/email/mail-front/config/prod/mail-front.conf:/etc/nginx/conf.d/mail-front.conf
+      - /.ssh/STAR.taewonsoft.co.kr_crt.pem:/root/.ssh/nginx.pem:ro
+      - /.ssh/STAR.taewonsoft.co.kr_key.pem:/root/.ssh/nginx.key:ro
+    networks:
+      - mail-network
+
+networks:
+  mail-network:
+    name: mail-network
+    driver: bridge

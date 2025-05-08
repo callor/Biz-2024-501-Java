@@ -1,0 +1,16 @@
+# docker build 명령어 => docker compose up -d --build
+
+# docker-compose 서비스 버전
+version: "3.8"
+
+services:
+  mail-jenkins:
+    container_name: mail-jenkins
+    image: jenkins/jenkins:lts
+    # 테스트서버 : 내부 8080포트를 8891로 연결
+    ports:
+      - 9000:8080
+    environment:
+      TZ: "Asia/Seoul"
+    volumes:
+      - /home/kbz/mail_jenkins/jenkins_home:/var/jenkins_home

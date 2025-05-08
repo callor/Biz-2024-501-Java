@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" content="text/html" />
+    <title>편집</title>
+  </head>
+
+  <script type="text/javascript" src="./resources/js/jquery-1.8.3.min.js"></script>
+
+  <script type="text/javascript" src="./resources/js/component.js"></script>
+  <script type="text/javascript" defer src="./resources/js/ace/ace.js"></script>
+  <script type="text/javascript" defer src="./resources/js/jodit.def.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="./resources/css/jodit.min.css" />
+
+  <body>
+    <script type="text/javascript">
+      const imgFileList = ["jpg", "png", "jpeg", "gif"];
+
+      $(document).ready(function () {
+        // 에디터 세팅
+        setEditor();
+      });
+
+      // 에디터 세팅
+      function setEditor() {
+        Jodit.make("#editor", {
+          // 높이 고정
+          height: 860,
+          allowResizeX: false,
+          allowResizeY: true,
+
+          // 툴바 이동 금지
+          toolbarSticky: false,
+
+          // 툴바 아이콘 사이즈 변경
+          toolbarButtonSize: "small",
+
+          // 필요 없는 버튼 제거
+          removeButtons: [
+            "video",
+            "find",
+            "superscript",
+            "subscript",
+            "spellcheck",
+            "ai-commands",
+            "ai-assistant",
+            "about",
+            "fullsize",
+            "preview",
+          ],
+
+          // 하단 워터마크 제거
+          hidePoweredByJodit: true,
+
+          // 푸터 오버 시 늘리기 버튼 제거거
+          addNewLine: false,
+
+          // 폰트 스타일 지정
+          style: {
+            font: "12px Arial",
+          },
+
+          // placeholder 제거
+          placeholder: "",
+
+          // 커스텀 버튼 추가
+          buttons: [
+            ...Jodit.defaultOptions.buttons.slice(0, 16),
+
+            // json 테이블 생성 버튼 추가
+            {
+              name: "json",
+              tooltip: "json 테이블 생성",
+              exec: (editor) => {
+                console.error();
+                // 편집기에 테이블 입력
+                editor.s.insertHTML("<ace-edit-table></ace-edit-table>");
+              },
+            },
+
+            Jodit.defaultOptions.buttons[15],
+
+            // code 블럭 생성 버튼 추가
+            {
+              name: "code",
+              tooltip: "code 블럭 생성",
+              exec: (editor) => {
+                editor.s.insertHTML("<ace-edit-black></ace-edit-black>");
+              },
+            },
+
+            ...Jodit.defaultOptions.buttons.slice(16, 17),
+
+            // ...Jodit.defaultOptions.buttons.slice(15, 16),
+
+            // Jodit.defaultOptions.buttons[18],
+
+            // // 테스트 템플릿 생성 버튼 추가
+            // {
+            //   name: "수수료안내1",
+            //   tooltip: "test 템플릿 생성",
+            //   exec: (editor) => {
+            //     // editor.s.insertHTML("<test-template></test-template>");
+            //     editor.value = "<test-template></test-template>";
+            //   },
+            // },
+
+            // Jodit.defaultOptions.buttons[18],
+
+            // // 테스트 템플릿 생성 버튼 추가
+            // {
+            //   name: "수수료안내2",
+            //   tooltip: "test2 템플릿 생성",
+            //   exec: (editor) => {
+            //     editor.value = "<template-two></template-two>";
+            //   },
+            // },
+
+            // Jodit.defaultOptions.buttons[18],
+
+            // // 테스트 템플릿 생성 버튼 추가
+            // {
+            //   name: "단말기 임대 계약서",
+            //   tooltip: "test2 템플릿 생성",
+            //   exec: (editor) => {
+            //     editor.value = "<template-two></template-two>";
+            //   },
+            // },
+          ],
+
+          // 업로드 형식 지정
+          uploader: {
+            // 이미지 파일로 처리할 파일 형식
+            imagesExtensions: imgFileList,
+
+            // 전송 설정
+            // url: "/common/file/list/save.data",
+            // format: "json",
+
+            url: "http://localhost:8080/email/addTempImage",
+            format: "json",
+            method: "POST",
+          },
+        });
+      }
+    </script>
+
+    <div id="post_write_box">
+      <label>
+        <textarea id="editor" name="editor"></textarea>
+      </label>
+    </div>
+  </body>
+</html>

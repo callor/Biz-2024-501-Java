@@ -1,0 +1,1 @@
+{"ast":null,"code":"export default {\n  baseURL: process.env.NEXT_PUBLIC_API_URI,\n  isServer: false\n};","map":null,"metadata":{},"sourceType":"module"}

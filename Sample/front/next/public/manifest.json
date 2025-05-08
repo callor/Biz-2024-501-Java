@@ -1,0 +1,6 @@
+{
+  "short_name": "KMEMO",
+  "name": "KMEMO - 일정관리",
+  "start_url": "/",
+  "display": "standalone"
+}

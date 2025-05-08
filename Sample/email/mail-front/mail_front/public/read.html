@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset = "utf-8" content="text/html">
+        <title>보기</title></head>
+
+        <script type="text/javascript" src="./resources/js/jquery-1.8.3.min.js"></script>
+
+        <script type="text/javascript" src="./resources/js/component.js"></script>
+        <script type="text/javascript" defer src="./resources/js/ace/ace.js"></script>
+        <script type="text/javascript" defer src="./resources/js/jodit.def.js"></script>
+
+        <link type="text/css" rel="stylesheet" href="./resources/css/jodit.min.css"/>
+
+    <body>
+        <script type="text/javascript">
+            $(document).ready(function() {
+
+                // 에디터 세팅
+                setEditor();
+
+                // 비활성화
+                setReadonly();
+
+                // 코드박스 적용
+                setCodeBox();
+            });
+
+            // 에디터 세팅
+            function setEditor() {
+                const editor = Jodit.make("#editor", {
+
+                    // 높이 고정
+                    allowResizeX: false,
+                    allowResizeY: false,
+
+                    // 툴바 제거
+                    toolbar  : false,
+                    statusbar: false,
+
+                    // 폰트 스타일 지정
+                    style : {
+                        font: "12px Arial",
+                    },
+                });
+
+                editor.setReadOnly(true);
+            }
+
+            // 비활성화
+            function setReadonly() {
+                const aceEditBoxList = $("#post_view_box").find("ace-edit-box"),
+                      fileBoxList    = $("#post_view_box").find("file-box"    );
+
+                // 코드 블럭 비활성화
+                aceEditBoxList.each(function () {
+                    const thisObj   = $(this),
+                          aceEditor = thisObj.data("aceEditor");
+
+                    // 수정 불가 세팅
+                    aceEditor.setReadOnly(true);
+                });
+
+                // 파일 박스 비활성화
+                fileBoxList.each(function () {
+                    const thisObj = $(this),
+                          btnObj  = $(thisObj[0].shadowRoot.querySelector(".file_close_btn"));
+
+                    btnObj.css("visibility", "hidden");
+                });
+            }
+
+            // 코드박스 적용
+            function setCodeBox() {
+                const selectList = $("table").find(".theme, .mode");
+
+                selectList.trigger("change");
+            }
+        </script>
+
+
+        <div id="post_view_box">
+            <label>
+                <textarea id="editor" name="editor" style="display: none;">&lt;p&gt;&lt;br&gt;&lt;table style="border-collapse:collapse;width: 100%;"&gt;
+                               &lt;tbody&gt;
+                                   &lt;tr style="height: 30px;"&gt;
+                                       &lt;td style="width: 50%; background-color: rgb(67, 67, 67);"&gt;
+                                           &lt;span style="color: rgb(255, 255, 255); font-size: 12px;"&gt;파라미터명&lt;/span&gt;
+                                       &lt;/td&gt;
+                                       &lt;td style="width: 50%; background-color: rgb(67, 67, 67);"&gt;
+                                           &lt;span style="color: rgb(255, 255, 255); font-size: 12px;"&gt;설명&lt;/span&gt;
+                                       &lt;/td&gt;
+                                   &lt;/tr&gt;
+                                   &lt;tr contenteditable="false"&gt;
+                                       &lt;td style="width: 50%; padding: 0;"&gt;
+                                           &lt;ace-edit-box class="json_edit" style="display: inline-block; width: 100%;" data-value="
+{
+    123:123
+}
+
+" data-lines="6"&gt;&lt;/ace-edit-box&gt;
+                                       &lt;br&gt;&lt;/td&gt;
+                                       &lt;td style="width: 50%; padding: 0;"&gt;
+                                           &lt;ace-edit-box class="json_edit" style="display: inline-block; width: 100%;" data-lines="6" data-value="
+{
+    123:123
+}
+
+"&gt;&lt;/ace-edit-box&gt;
+                                       &lt;br&gt;&lt;/td&gt;
+                                   &lt;/tr&gt;
+                               &lt;/tbody&gt;
+                           &lt;/table&gt;&lt;/p&gt;&lt;p&gt;&lt;span style="font-size: 60px;"&gt;&lt;table style="border-collapse:collapse;width: 100%;"&gt;
+                                &lt;tbody&gt;
+                                    &lt;tr style="height: 30px;"&gt;
+                                        &lt;td style="width: 80%; background-color: rgb(67, 67, 67);"&gt;
+                                            &lt;span style="color: rgb(255, 255, 255); font-size: 12px;"&gt;제목&lt;/span&gt;
+                                        &lt;/td&gt;
+                                        &lt;td style="width: 20%; background-color: rgb(67, 67, 67);" onmousedown="stopEvent(event);" onclick="stopEvent(event);"&gt;
+                                            &lt;select onload="console.log(77777)" class="theme" style="width: 50%;" title="테마" onchange="chgCodeBoxTheme(this);"&gt;
+                                                &lt;option value="" selected="selected"&gt;default&lt;/option&gt;
+                                                &lt;option value="github"&gt;github&lt;/option&gt;
+                                                &lt;option value="github_dark"&gt;github_dark&lt;/option&gt;
+                                                &lt;option value="terminal"&gt;terminal&lt;/option&gt;
+                                            &lt;/select&gt;
+                                            &lt;select class="mode" style="width: calc(50% - .4em);" title="포멧" onchange="chgCodeBoxFormat(this);"&gt;
+                                                &lt;option value="sh" selected="selected"&gt;.sh&lt;/option&gt;
+                                                &lt;option value="powershell"&gt;.powershell&lt;/option&gt;
+                                                &lt;option value="javascript"&gt;.javascript&lt;/option&gt;
+                                                &lt;option value="html"&gt;.html&lt;/option&gt;
+                                                &lt;option value="jsp"&gt;.jsp&lt;/option&gt;
+                                                &lt;option value="php"&gt;.php&lt;/option&gt;
+                                                &lt;option value="java"&gt;.java&lt;/option&gt;
+                                                &lt;option value="dart"&gt;.dart&lt;/option&gt;
+                                                &lt;option value="sql"&gt;.sql&lt;/option&gt;
+                                                &lt;option value="xml"&gt;.xml&lt;/option&gt;
+                                                &lt;option value="yaml"&gt;.yaml&lt;/option&gt;
+                                            &lt;/select&gt;
+                                        &lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    &lt;tr contenteditable="false"&gt;
+                                        &lt;td style="width: 50%; padding: 0;" colspan="2"&gt;
+                                            &lt;ace-edit-box style="display: inline-block; width: 100%;" data-value="
+123
+"&gt;&lt;/ace-edit-box&gt;
+                                        &lt;br&gt;&lt;/td&gt;
+                                    &lt;br&gt;&lt;/tr&gt;
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style="font-size: 60px;"&gt;&lt;br&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style="font-size: 60px;"&gt;테스트 입니다&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;table style="border-collapse:collapse;width: 100%;"&gt;&lt;tbody&gt;
+&lt;tr&gt;
+	&lt;td style="width: 10%;"&gt;1&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;2&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;3&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;4&lt;/td&gt;
+	&lt;td style="width: 10.0386%; background-color: rgb(241, 194, 50);" rowspan="2"&gt;5&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;6&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;7&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;8&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;8&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;9&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td style="width: 20.0772%; background-color: rgb(255, 0, 0);" colspan="2"&gt;&lt;br&gt;&lt;/td&gt;
+
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;
+	&lt;td style="width: 10%;"&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;file-box data-href="/common/file/get.file/115" data-text="FreeTalkU.exe" draggable="true" style="display: inline-block;"&gt;&lt;/file-box&gt;&lt;file-box data-href="/common/file/get.file/116" data-text="FreeTalk.exe" draggable="true" style="display: inline-block;"&gt;&lt;/file-box&gt;&lt;br&gt;&lt;/p&gt;</textarea>
+            </label>
+        </div>
+    </body>
+</html>

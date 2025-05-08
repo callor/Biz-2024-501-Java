@@ -1,0 +1,31 @@
+# docker-compose -f docker-compose-blue up -d --build
+# docker-compose up -d
+# firewall-cmd --add-rich-rule='rule family="ipv4" source address=59.0.213.4 port port="8090" protocol="tcp" accept'
+
+version: "3.7"
+
+services:
+  mail_front_blue:
+    container_name: mail_front_blue
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8090:3000
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - mail_blue_front_package:/app/node_modules # 패키지 볼륨
+      - mail_blue_front_build:/app/.next # 빌드폴더 볼륨
+    environment:
+      - TZ=Asia/Seoul
+volumes:
+  mail_blue_front_package:
+    external: true
+  mail_blue_front_build:
+    external: true
+
+networks:
+  default:
+    external:
+      name: nginx
